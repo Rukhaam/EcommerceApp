@@ -1,0 +1,6 @@
+{
+    "editor.experimentalGpuAcceleration": "on",
+    "terminal.integrated.enableImages": true,
+    "terminal.integrated.gpuAcceleration": "on",
+    "git.ignoreLimitWarning": true
+}
