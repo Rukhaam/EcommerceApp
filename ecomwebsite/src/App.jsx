@@ -1,23 +1,23 @@
 import React from "react";
 import "./App.css";
-import { Routes, Route, Navigate } from "react-router-dom"; // ✅ use Navigate instead of Redirect
+import { Routes, Route, Navigate } from "react-router-dom";
 import HomePage from "./pages/homepage.component.jsx";
 import ShopPage from "./pages/shop/shop.componnent.jsx"; // 
 import Header from "./components/header/header.component.jsx";
 import SigninAndSignUp from "./pages/sign-in and sign-up/sign-in and sign-up.jsx"; // 
 import CheckoutPage from "./pages/checkout/checkout.component.jsx";
 import { connect } from "react-redux";
-import { auth, createUserProfileDocument } from "./firebase/firebase.utils.js";
+import { auth, createUserProfileDocument,addCollectionsAndItems } from "./firebase/firebase.utils.js";
 import { onSnapshot } from "firebase/firestore";
 import { setCurrentUser } from "./Redux/user/user.actions.js";
 import { selectCurrentUser } from "./Redux/user/user.selector.js";
 import { createStructuredSelector } from "reselect";
-
+// import { selectCollectionsForPreview } from "./Redux/Shop/shop.selector.js";
 class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    const { setCurrentUser } = this.props;
+    const { setCurrentUser} = this.props;
 
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
@@ -31,6 +31,7 @@ class App extends React.Component {
         });
       } else {
         setCurrentUser(userAuth);
+        // addCollectionsAndItems("collections",collectionsArray.map(({title,items})=>({title,items})));
       }
     });
   }
@@ -61,7 +62,8 @@ class App extends React.Component {
 }
 
 const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser
+  currentUser: selectCurrentUser,
+ 
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -6,7 +6,7 @@ import CollectionItem from "../../components/collection-item/collection-item.com
 
 import "./collections.styles.scss";
 
-const CollectionPage = () => {
+ const CollectionPage = () => {
   const { collectionId } = useParams(); // ✅ v6 replacement for match.params
 
   const collection = useSelector(
@@ -28,5 +28,6 @@ const CollectionPage = () => {
     </div>
   );
 };
+
 
 export default CollectionPage;

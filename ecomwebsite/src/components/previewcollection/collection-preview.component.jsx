@@ -4,9 +4,7 @@ import CollectionItem from "../collection-item/collection-item.component";
 
 const CollectionPreview = ({ title, items }) => (
   <div className="collection-preview">
-    {/* 1. Safe check: Only uppercase if title exists */}
     <h1 className="title">{title ? title.toUpperCase() : ""}</h1>
-
     <div className="preview">
       {items &&
         items

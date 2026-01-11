@@ -5,7 +5,7 @@ const StripeCheckoutButton = ({ price }) => {
     const priceForStripes = price * 100;
     
     // Access the key from the environment
-    const publishableKey = process.env.REACT_APP_STRIPE_PUBLIC_KEY;
+    const publishableKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
 
     const onToken = token => {
         console.log(token);
