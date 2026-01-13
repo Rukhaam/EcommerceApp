@@ -21,7 +21,7 @@ export const removeItemFromCart = (cartItems, cartItemToRemove) => {
       cartItem => cartItem.id === cartItemToRemove.id
     );
   
-    // --- FIX: Add this check ---
+    // FIX: Add this check
     // If the item doesn't exist in the cart, do nothing.
     if (!existingCartItem) {
         return cartItems;
