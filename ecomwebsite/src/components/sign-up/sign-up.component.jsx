@@ -1,10 +1,9 @@
 import React from 'react';
 import FormInput from '../form/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
-import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
-import { createUserWithEmailAndPassword } from "firebase/auth";  // ✅ import this
+import { signUpStart } from '../../Redux/user/user.actions';
 import './sign-up.styles.scss';
-
+import { connect } from 'react-redux';
 class SignUp extends React.Component {
   constructor() {
     super();
@@ -19,29 +18,19 @@ class SignUp extends React.Component {
 
   handleSubmit = async event => {
     event.preventDefault();
-
+    const {signUpStart} = this.props;
     const { displayName, email, password, confirmPassword } = this.state;
-
+    if (password.length < 6) {
+      this.setState({
+        error: "Password must be at least 6 characters",
+      });
+      return alert("enter  digits password with OneUpperCase and One Special Character and a Number"); 
+    }
     if (password !== confirmPassword) {
       alert("Passwords don't match");
       return;
     }
-
-    try {
-      // ✅ v9 way
-      const { user } = await createUserWithEmailAndPassword(auth, email, password);
-
-      await createUserProfileDocument(user, { displayName });
-
-      this.setState({
-        displayName: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
-      });
-    } catch (error) {
-      console.error("Error signing up:", error);
-    }
+    signUpStart({displayName,email,password})
   };
 
   handleChange = event => {
@@ -94,5 +83,7 @@ class SignUp extends React.Component {
     );
   }
 }
-
-export default SignUp;
+const mapDispatchToProps =dispatch=>({
+   signUpStart : userCredentials=> dispatch(signUpStart(userCredentials))
+})
+export default connect(null,mapDispatchToProps)(SignUp);
