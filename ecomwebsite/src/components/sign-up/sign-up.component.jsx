@@ -1,89 +1,99 @@
-import React from 'react';
-import FormInput from '../form/form-input.component';
-import CustomButton from '../custom-button/custom-button.component';
-import { signUpStart } from '../../Redux/user/user.actions';
-import './sign-up.styles.scss';
-import { connect } from 'react-redux';
-class SignUp extends React.Component {
-  constructor() {
-    super();
+import React, { useState, useEffect } from "react";
+import FormInput from "../form/form-input.component";
+import CustomButton from "../custom-button/custom-button.component";
+import { signUpStart } from "../../Redux/user/user.actions";
+import "./sign-up.styles.scss";
+import { useDispatch } from "react-redux";
 
-    this.state = {
-      displayName: '',
-      email: '',
-      password: '',
-      confirmPassword: ''
-    };
-  }
+const SignUp = () => {
+  const dispatch = useDispatch();
 
-  handleSubmit = async event => {
+  const [formFields, setFormFields] = useState({
+    displayName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const { displayName, email, password, confirmPassword } = formFields;
+
+  const handleSubmit = (event) => {
     event.preventDefault();
-    const {signUpStart} = this.props;
-    const { displayName, email, password, confirmPassword } = this.state;
+
     if (password.length < 6) {
-      this.setState({
-        error: "Password must be at least 6 characters",
-      });
-      return alert("enter  digits password with OneUpperCase and One Special Character and a Number"); 
+      alert(
+        "Password must be at least 6 characters with one uppercase, one number, and one special character"
+      );
+      return;
     }
+
     if (password !== confirmPassword) {
       alert("Passwords don't match");
       return;
     }
-    signUpStart({displayName,email,password})
+
+    dispatch(signUpStart({ displayName, email, password }));
   };
 
-  handleChange = event => {
+  const handleChange = (event) => {
     const { name, value } = event.target;
-    this.setState({ [name]: value });
+    setFormFields({ ...formFields, [name]: value });
   };
 
-  render() {
-    const { displayName, email, password, confirmPassword } = this.state;
-    return (
-      <div className='sign-up'>
-        <h2 className='title'>I do not have an account</h2>
-        <span>Sign up with your email and password</span>
-        <form className='sign-up-form' onSubmit={this.handleSubmit}>
-          <FormInput
-            type='text'
-            name='displayName'
-            value={displayName}
-            onChange={this.handleChange}
-            label='Display Name'
-            required
-          />
-          <FormInput
-            type='email'
-            name='email'
-            value={email}
-            onChange={this.handleChange}
-            label='Email'
-            required
-          />
-          <FormInput
-            type='password'
-            name='password'
-            value={password}
-            onChange={this.handleChange}
-            label='Password'
-            required
-          />
-          <FormInput
-            type='password'
-            name='confirmPassword'
-            value={confirmPassword}
-            onChange={this.handleChange}
-            label='Confirm Password'
-            required
-          />
-          <CustomButton type='submit'>SIGN UP</CustomButton>
-        </form>
-      </div>
-    );
-  }
-}
-const mapDispatchToProps =dispatch=>({
-   signUpStart : userCredentials=> dispatch(signUpStart(userCredentials))
-})
-export default connect(null,mapDispatchToProps)(SignUp);
+  // 🔁 replaces componentDidMount (optional)
+  useEffect(() => {
+    // mount logic if needed
+    return () => {
+      // cleanup if needed
+    };
+  }, []);
+
+  return (
+    <div className="sign-up">
+      <h2 className="title">I do not have an account</h2>
+      <span>Sign up with your email and password</span>
+
+      <form className="sign-up-form" onSubmit={handleSubmit}>
+        <FormInput
+          type="text"
+          name="displayName"
+          value={displayName}
+          onChange={handleChange}
+          label="Display Name"
+          required
+        />
+
+        <FormInput
+          type="email"
+          name="email"
+          value={email}
+          onChange={handleChange}
+          label="Email"
+          required
+        />
+
+        <FormInput
+          type="password"
+          name="password"
+          value={password}
+          onChange={handleChange}
+          label="Password"
+          required
+        />
+
+        <FormInput
+          type="password"
+          name="confirmPassword"
+          value={confirmPassword}
+          onChange={handleChange}
+          label="Confirm Password"
+          required
+        />
+
+        <CustomButton type="submit">SIGN UP</CustomButton>
+      </form>
+    </div>
+  );
+};
+
+export default SignUp;

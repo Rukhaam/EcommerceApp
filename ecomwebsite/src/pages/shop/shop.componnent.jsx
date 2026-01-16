@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
@@ -9,22 +9,20 @@ import { selectCollectionFetching } from "../../Redux/Shop/shop.selector";
 import CollectionsOverviewContainer from "../../components/collections-overview/collection-overview.container";
 import CollectionsPageContainer from "../Category/collections.container";
 
-class ShopPage extends React.Component {
-  componentDidMount() {
-    this.props.fetchCollectionsStart(); // ✅ dispatches plain object
-  }
+const ShopPage = ({ fetchCollectionsStart }) => {
+  useEffect(() => {
+    fetchCollectionsStart(); // dispatches plain object
+  }, [fetchCollectionsStart]);
 
-  render() {
-    return (
-      <div className="shop-page">
-        <Routes>
-          <Route index element={<CollectionsOverviewContainer />} />
-          <Route path=":collectionId" element={<CollectionsPageContainer />} />
-        </Routes>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="shop-page">
+      <Routes>
+        <Route index element={<CollectionsOverviewContainer />} />
+        <Route path=":collectionId" element={<CollectionsPageContainer />} />
+      </Routes>
+    </div>
+  );
+};
 
 const mapStateToProps = createStructuredSelector({
   isCollectionFetching: selectCollectionFetching,
