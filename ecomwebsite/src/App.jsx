@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useContext } from "react"; // Import useContext
 import "./App.css";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { connect } from "react-redux";
+// Remove connect, selectCurrentUser, checkUserSession
 
 import HomePage from "./pages/homepage.component.jsx";
 import ShopPage from "./pages/shop/shop.componnent.jsx";
@@ -9,20 +9,14 @@ import Header from "./components/header/header.component.jsx";
 import SigninAndSignUp from "./pages/sign-in and sign-up/sign-in and sign-up.jsx";
 import CheckoutPage from "./pages/checkout/checkout.component.jsx";
 
-import { selectCurrentUser } from "./Redux/user/user.selector.js";
-import { createStructuredSelector } from "reselect";
-import { checkUserSession } from "./Redux/user/user.actions.js";
+import { UserContext } from "./context/user.context.jsx"; // Import Context
 
-const App = ({ currentUser, checkUserSession }) => {
-  // 🔁 replaces componentDidMount
-  useEffect(() => {
-    checkUserSession();
-  }, [checkUserSession]);
+const App = () => {
+  const { currentUser } = useContext(UserContext); // Get currentUser from Context
 
   return (
     <div>
       <Header />
-
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/shop/*" element={<ShopPage />} />
@@ -30,6 +24,7 @@ const App = ({ currentUser, checkUserSession }) => {
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route
           path="/signin"
+          // Use currentUser from Context
           element={currentUser ? <Navigate to="/" /> : <SigninAndSignUp />}
         />
       </Routes>
@@ -37,12 +32,4 @@ const App = ({ currentUser, checkUserSession }) => {
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  checkUserSession: () => dispatch(checkUserSession()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;
